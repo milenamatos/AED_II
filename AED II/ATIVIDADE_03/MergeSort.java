@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class MergeSort {
@@ -14,13 +13,18 @@ public class MergeSort {
     int[] idCandidates;
     List<Candidate> candidatesVotes = new ArrayList<Candidate>();
 
-    public class Candidate {
+    public class Candidate implements Comparable<Candidate>{
         int Id;
         int votes;
 
         public Candidate(int id, int votes){
             this.Id = id;
             this.votes = votes;
+        }
+
+        @Override
+        public int compareTo(Candidate other) {
+            return other.votes - this.votes; 
         }
     }
 
@@ -79,7 +83,7 @@ public class MergeSort {
     public String getWinner(){
         StringBuilder results = new StringBuilder();
 
-        candidatesVotes.sort(Comparator.comparing(c -> c.votes));
+        Collections.sort(candidatesVotes);
         Candidate winner = candidatesVotes.get(candidates-1);
 
         double percentage = getPercentage(winner.votes);
@@ -104,11 +108,9 @@ public class MergeSort {
 
         this.secondRound = true;
         RecordVotes();
-
-        return candidatesVotes
-        .stream()
-        .max(Comparator.comparingInt(c -> c.votes))
-        .orElseThrow(NoSuchElementException::new);
+        
+        Collections.sort(candidatesVotes);
+        return candidatesVotes.get(0);
     }
 
     public double getPercentage(int votes){
@@ -117,7 +119,6 @@ public class MergeSort {
 
     public static void main(String[] args){
         MergeSort sort = new MergeSort();
-        //System.out.println("Número de eleitores / numero de candidatos: ");
         Scanner scanner = new Scanner(System.in);
         int voters = scanner.nextInt();
         int candidates = scanner.nextInt();

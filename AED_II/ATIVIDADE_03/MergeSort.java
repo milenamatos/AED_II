@@ -28,18 +28,16 @@ public class MergeSort {
         }
     }
 
-    public void FillVotes(int voters){
-        this.voters = voters;
+    public void FillVotes(Scanner scanner){
+        int i = 0, j = 0; 
         this.secondRound = false;        
         votes = new int[voters][numVotes];
 
-        Scanner scanner = new Scanner(System.in);
-        for(int i = 0; i < voters; i++){
-            for(int j = 0; j < numVotes; j++){
+        for(i = 0; i < voters; i++){
+            for(j = 0; j < numVotes; j++){
                 votes[i][j] = scanner.nextInt();
             }
         }
-        scanner.close();
     }
 
     public void RecordVotes(){
@@ -64,8 +62,7 @@ public class MergeSort {
         else return false;
     }
 
-    public void CreateCandidates(int candidates){
-        this.candidates = candidates;
+    public void CreateCandidates(){
         for(int i = 0; i < candidates; i++){
             candidatesVotes.add(new Candidate(i+1, 0));
         }
@@ -84,7 +81,7 @@ public class MergeSort {
         StringBuilder results = new StringBuilder();
 
         Collections.sort(candidatesVotes);
-        Candidate winner = candidatesVotes.get(candidates-1);
+        Candidate winner = candidatesVotes.get(0);
 
         double percentage = getPercentage(winner.votes);
         results.append(winner.Id + " " + String.format("%.2f", percentage));
@@ -99,12 +96,12 @@ public class MergeSort {
     }
 
     public Candidate getWinnerSecondRound(){
-        candidatesVotes.get(candidates -1).votes = 0;
-        candidatesVotes.get(candidates -2).votes = 0;
+        candidatesVotes.get(0).votes = 0;
+        candidatesVotes.get(1).votes = 0;
 
         idCandidates = new int[2];
-        idCandidates[0] = candidatesVotes.get(candidates -1).Id;
-        idCandidates[1] = candidatesVotes.get(candidates -2).Id;
+        idCandidates[0] = candidatesVotes.get(0).Id;
+        idCandidates[1] = candidatesVotes.get(1).Id;
 
         this.secondRound = true;
         RecordVotes();
@@ -120,15 +117,20 @@ public class MergeSort {
     public static void main(String[] args){
         MergeSort sort = new MergeSort();
         Scanner scanner = new Scanner(System.in);
-        int voters = scanner.nextInt();
-        int candidates = scanner.nextInt();
+        sort.voters = scanner.nextInt();
+        sort.candidates = scanner.nextInt();
 
-        sort.CreateCandidates(candidates);
-        sort.FillVotes(voters);
-        sort.RecordVotes();
+        sort.CreateCandidates();
+        sort.FillVotes(scanner);
         scanner.close();
-
-        System.out.println((sort.validVotes == 0)? 0 : sort.getWinner());
+        sort.RecordVotes();
+       
+        if(sort.validVotes == 0){
+            System.out.println(0);
+        }
+        else{
+            System.out.println(sort.getWinner());
+        }
     }
 
 }

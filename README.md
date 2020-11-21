@@ -1,4 +1,4 @@
-# UNIFESP - AED_II
+# UNIFESP - AED II
 
 Este repositório contém códigos pessoais desenvolvidos durante meu curso da disciplina AED II - Algoritmo e Estrutura de Dados II, na UNIFESP.
 
